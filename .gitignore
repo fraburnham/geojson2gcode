@@ -1,0 +1,9 @@
+.clj-kondo/
+.cpcache/
+.lsp/
+.nrepl-port
+classes/
+target/
+*.gcode
+*.geojson
+*~
