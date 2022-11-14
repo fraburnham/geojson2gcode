@@ -38,6 +38,13 @@
       [(scale-long long)
        (scale-lat lat)])))
 
+(defn handle-mirroring
+  [{:keys [x-mirror y-mirror] :as config}]
+  (cond x-mirror (let [{:keys [x-min x-max]} config]
+                   (merge config {:x-min x-max :x-max x-min}))
+        y-mirror (let [{:keys [y-min y-max]} config]
+                   (merge config {:y-min y-max :y-max y-min}))))
+
 (defmulti scale
   (fn [scaler geojson]
     (:type geojson)))

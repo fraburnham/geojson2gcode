@@ -8,7 +8,7 @@
 (defn encode
   [config geo]
   (as-> (geom/bounds geo) *
-    (trans/make-coords-scaler * (trans/determine-real-bounds * config))
+    (trans/make-coords-scaler * (trans/handle-mirroring (trans/determine-real-bounds * config)))
     (trans/scale * geo)
     (:coordinates *)
     ;; nb: this fn doesn't get the config that was upsted with aspect ratio stuff
