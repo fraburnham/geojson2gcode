@@ -42,8 +42,10 @@
   [config paths]
   (let [gcode (->> (prepare-coords paths)
                    (construct-gcode config))]
-    (reduce
-     #(str %1 "\n" %2)
-     (str "g90\n" ; absolute coordinates
-          (m4 {:s (:laser-intensity config)}))
-     gcode)))
+    (str ; append \n to end of str (posix file requirement)
+     (reduce
+      #(str %1 "\n" %2)
+      (str "g90\n"                     ; absolute coordinates
+           (m4 {:s (:laser-intensity config)}))
+      gcode)
+     "\n")))
