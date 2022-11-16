@@ -19,7 +19,8 @@
 
 (defn -main [& args]
   (let [options (-> (Options.)
-                    (.addOption "c" "config-file" true "Config file for laser config and final size"))
+                    (.addOption "c" "config-file" true "Config file for laser config and final size")
+                    (.addOption "i" "input-file" true "Input geojson file. Consumes from *in* if not set."))
         cli-args (.parse (DefaultParser.) options (into-array java.lang.String args))
         config (if (.hasOption cli-args "c")
                  (edn/read-string (slurp (.getOptionValue cli-args "c")))
@@ -27,8 +28,11 @@
                   :laser-intensity 1000
                   :travel-speed 3000
                   :x-min 0 :x-max 100
-                  :y-min 0 :y-max 100})]
-    (as-> (slurp *in*) *
+                  :y-min 0 :y-max 100})
+        input-source (if (.hasOption cli-args "i")
+                       (.getOptionValue cli-args "i")
+                       *in*)]
+    (as-> (slurp input-source) *
       (json/read-str * :key-fn keyword)
       (encode config *)
       (println *))))
